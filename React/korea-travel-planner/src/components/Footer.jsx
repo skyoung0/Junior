@@ -61,7 +61,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
-          <p className="text-base text-gray-400">&copy; 2025 한국 AI 여행 플래너. 모든 권리 보유.</p>
+          <p className="text-base text-gray-400">&copy; 2025 한국 AI 여행 플래너. 정익상이 모든 권리 보유.</p>
           <div className="mt-4 md:mt-0">
             <p className="text-gray-400">이 사이트는 데모용입니다.</p>
           </div>
