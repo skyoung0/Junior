@@ -1,0 +1,149 @@
+[
+    {
+      "destination": "서울",
+      "routes": [
+        {
+          "from": "부산",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "06:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "07:30", "duration": "2시간 40분", "price": 59800},
+            {"time": "09:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "11:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "13:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "15:30", "duration": "2시간 40분", "price": 59800},
+            {"time": "17:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "19:00", "duration": "2시간 40분", "price": 59800}
+          ]
+        },
+        {
+          "from": "전주",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "07:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "09:30", "duration": "1시간 40분", "price": 34000},
+            {"time": "12:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "15:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "18:00", "duration": "1시간 40분", "price": 34000}
+          ]
+        },
+        {
+          "from": "경주",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "08:00", "duration": "2시간 10분", "price": 49800},
+            {"time": "11:30", "duration": "2시간 10분", "price": 49800},
+            {"time": "14:00", "duration": "2시간 10분", "price": 49800},
+            {"time": "17:30", "duration": "2시간 10분", "price": 49800}
+          ]
+        },
+        {
+          "from": "강릉",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "06:30", "duration": "2시간", "price": 27600},
+            {"time": "09:30", "duration": "2시간", "price": 27600},
+            {"time": "12:30", "duration": "2시간", "price": 27600},
+            {"time": "15:30", "duration": "2시간", "price": 27600},
+            {"time": "18:30", "duration": "2시간", "price": 27600}
+          ]
+        }
+      ]
+    },
+    {
+      "destination": "부산",
+      "routes": [
+        {
+          "from": "서울",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "06:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "08:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "10:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "12:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "14:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "16:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "18:00", "duration": "2시간 40분", "price": 59800},
+            {"time": "20:00", "duration": "2시간 40분", "price": 59800}
+          ]
+        },
+        {
+          "from": "경주",
+          "trainType": "무궁화호",
+          "departures": [
+            {"time": "07:30", "duration": "40분", "price": 8400},
+            {"time": "10:30", "duration": "40분", "price": 8400},
+            {"time": "13:30", "duration": "40분", "price": 8400},
+            {"time": "16:30", "duration": "40분", "price": 8400},
+            {"time": "19:30", "duration": "40분", "price": 8400}
+          ]
+        }
+      ]
+    },
+    {
+      "destination": "전주",
+      "routes": [
+        {
+          "from": "서울",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "07:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "09:30", "duration": "1시간 40분", "price": 34000},
+            {"time": "12:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "15:00", "duration": "1시간 40분", "price": 34000},
+            {"time": "18:00", "duration": "1시간 40분", "price": 34000}
+          ]
+        },
+        {
+          "from": "부산",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "08:00", "duration": "2시간 20분", "price": 42000},
+            {"time": "12:00", "duration": "2시간 20분", "price": 42000},
+            {"time": "16:00", "duration": "2시간 20분", "price": 42000}
+          ]
+        }
+      ]
+    },
+    {
+      "destination": "경주",
+      "routes": [
+        {
+          "from": "서울",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "07:00", "duration": "2시간 10분", "price": 49800},
+            {"time": "10:00", "duration": "2시간 10분", "price": 49800},
+            {"time": "13:00", "duration": "2시간 10분", "price": 49800},
+            {"time": "16:00", "duration": "2시간 10분", "price": 49800}
+          ]
+        },
+        {
+          "from": "부산",
+          "trainType": "무궁화호",
+          "departures": [
+            {"time": "08:00", "duration": "40분", "price": 8400},
+            {"time": "11:00", "duration": "40분", "price": 8400},
+            {"time": "14:00", "duration": "40분", "price": 8400},
+            {"time": "17:00", "duration": "40분", "price": 8400}
+          ]
+        }
+      ]
+    },
+    {
+      "destination": "강릉",
+      "routes": [
+        {
+          "from": "서울",
+          "trainType": "KTX",
+          "departures": [
+            {"time": "06:00", "duration": "2시간", "price": 27600},
+            {"time": "09:00", "duration": "2시간", "price": 27600},
+            {"time": "12:00", "duration": "2시간", "price": 27600},
+            {"time": "15:00", "duration": "2시간", "price": 27600},
+            {"time": "18:00", "duration": "2시간", "price": 27600}
+          ]
+        }
+      ]
+    }
+  ]

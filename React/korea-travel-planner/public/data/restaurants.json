@@ -1,0 +1,208 @@
+[
+    {
+      "destination": "서울",
+      "restaurants": [
+        {
+          "id": 1,
+          "name": "광화문 삼청동 수제비",
+          "description": "전통 한식의 맛을 느낄 수 있는 수제비 전문점",
+          "location": "종로구 삼청동",
+          "cuisine": "한식",
+          "priceRange": "$$",
+          "rating": 4.6,
+          "mustTry": ["들깨 수제비", "감자 전", "묵밥"],
+          "image": "https://images.unsplash.com/photo-1580651315530-69c8e0026377?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 2,
+          "name": "을지로 노가리 골목",
+          "description": "을지로의 인기 있는 노가리 맥주 골목. 한국식 맥주 안주 문화 체험",
+          "location": "중구 을지로3가",
+          "cuisine": "포장마차/안주",
+          "priceRange": "$",
+          "rating": 4.5,
+          "mustTry": ["노가리", "오뎅탕", "소주"],
+          "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 3,
+          "name": "통인시장 도시락 카페",
+          "description": "전통 시장 안에 있는 독특한 컨셉의 식당. 엽전으로 반찬을 골라 도시락 구성",
+          "location": "종로구 통인동",
+          "cuisine": "한식",
+          "priceRange": "$",
+          "rating": 4.7,
+          "mustTry": ["도시락", "김밥", "떡볶이"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 4,
+          "name": "명동 교자",
+          "description": "50년 전통의 만두 전문점. 손으로 직접 빚은 만두가 유명",
+          "location": "중구 명동",
+          "cuisine": "분식",
+          "priceRange": "$$",
+          "rating": 4.8,
+          "mustTry": ["물만두", "고기만두", "김치만두"],
+          "image": "https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "부산",
+      "restaurants": [
+        {
+          "id": 5,
+          "name": "자갈치 회센터",
+          "description": "부산 대표 수산시장인 자갈치 시장에서 신선한 해산물 맛보기",
+          "location": "중구 자갈치해안로",
+          "cuisine": "해산물",
+          "priceRange": "$$$",
+          "rating": 4.6,
+          "mustTry": ["회", "해물탕", "산낙지"],
+          "image": "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 6,
+          "name": "해운대 밀면",
+          "description": "부산 명물인 밀면을 맛볼 수 있는 대표 맛집",
+          "location": "해운대구 중동",
+          "cuisine": "한식",
+          "priceRange": "$$",
+          "rating": 4.5,
+          "mustTry": ["물밀면", "비빔밀면", "만두"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 7,
+          "name": "깡통시장 씨앗호떡",
+          "description": "부산의 유명한 길거리 음식, 견과류가 들어간 달콤한 호떡",
+          "location": "중구 깡통시장",
+          "cuisine": "길거리 음식",
+          "priceRange": "$",
+          "rating": 4.7,
+          "mustTry": ["씨앗호떡", "어묵", "튀김"],
+          "image": "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?q=80&w=1920&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "제주도",
+      "restaurants": [
+        {
+          "id": 8,
+          "name": "제주 흑돼지 명가",
+          "description": "제주 특산물인 흑돼지를 맛볼 수 있는 인기 맛집",
+          "location": "제주시 노형동",
+          "cuisine": "한식/바베큐",
+          "priceRange": "$$$",
+          "rating": 4.8,
+          "mustTry": ["흑돼지 삼겹살", "오겹살", "김치찌개"],
+          "image": "https://images.unsplash.com/photo-1590534247854-e97d5e3feef6?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 9,
+          "name": "제주 해녀의 집",
+          "description": "해녀들이 직접 잡은 신선한 해산물을 맛볼 수 있는 식당",
+          "location": "서귀포시 성산읍",
+          "cuisine": "해산물",
+          "priceRange": "$$",
+          "rating": 4.6,
+          "mustTry": ["전복죽", "성게미역국", "해산물 뚝배기"],
+          "image": "https://images.unsplash.com/photo-1575932444877-5106bee2a599?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "경주",
+      "restaurants": [
+        {
+          "id": 10,
+          "name": "황남빵",
+          "description": "경주 대표 간식인 황남빵의 원조 가게",
+          "location": "경주시 황남동",
+          "cuisine": "디저트/간식",
+          "priceRange": "$",
+          "rating": 4.7,
+          "mustTry": ["황남빵", "경주빵", "찹쌀떡"],
+          "image": "https://images.unsplash.com/photo-1505575967455-40e256f73376?q=80&w=1980&auto=format&fit=crop"
+        },
+        {
+          "id": 11,
+          "name": "양북 쌈밥",
+          "description": "경주 양북면에 위치한 유기농 쌈채소로 유명한 쌈밥집",
+          "location": "경주시 양북면",
+          "cuisine": "한식",
+          "priceRange": "$$",
+          "rating": 4.5,
+          "mustTry": ["쌈밥정식", "된장찌개", "청국장"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "전주",
+      "restaurants": [
+        {
+          "id": 12,
+          "name": "옥화당",
+          "description": "전주한옥마을에서 유명한 전통 비빔밥 맛집",
+          "location": "완산구 풍남동",
+          "cuisine": "한식",
+          "priceRange": "$$",
+          "rating": 4.8,
+          "mustTry": ["전주비빔밥", "육회비빔밥", "막걸리"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 13,
+          "name": "PNB 풍년제과",
+          "description": "90년 역사의 전주 대표 빵집, 특히 초코파이가 유명",
+          "location": "완산구 전동",
+          "cuisine": "베이커리",
+          "priceRange": "$",
+          "rating": 4.6,
+          "mustTry": ["초코파이", "수제빵", "크림빵"],
+          "image": "https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?q=80&w=1980&auto=format&fit=crop"
+        },
+        {
+          "id": 14,
+          "name": "왱이콩나물국밥",
+          "description": "전주 콩나물국밥의 대표 맛집, 아침식사로 인기",
+          "location": "완산구 풍남동",
+          "cuisine": "한식",
+          "priceRange": "$",
+          "rating": 4.5,
+          "mustTry": ["콩나물국밥", "수제비", "떡갈비"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "강릉",
+      "restaurants": [
+        {
+          "id": 15,
+          "name": "강릉 초당두부마을",
+          "description": "강릉 초당동의 유명한 두부요리 전문점",
+          "location": "강릉시 초당동",
+          "cuisine": "한식",
+          "priceRange": "$$",
+          "rating": 4.7,
+          "mustTry": ["순두부찌개", "두부전골", "두부김치"],
+          "image": "https://images.unsplash.com/photo-1590301157890-4810ed352733?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 16,
+          "name": "테라로사 커피",
+          "description": "강릉 대표 로스터리 카페, 커피 애호가들의 성지",
+          "location": "강릉시 구정면",
+          "cuisine": "카페/디저트",
+          "priceRange": "$$",
+          "rating": 4.9,
+          "mustTry": ["시그니처 블렌드", "핸드드립 커피", "디저트"],
+          "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop"
+        }
+      ]
+    }
+  ]

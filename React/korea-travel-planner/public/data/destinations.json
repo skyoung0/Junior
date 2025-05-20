@@ -1,0 +1,56 @@
+[
+    {
+      "id": 1,
+      "name": "서울",
+      "description": "현대와 전통이 공존하는 한국의 수도",
+      "shortDescription": "역사적 명소와 현대적 시설이 어우러진 도시",
+      "image": "https://images.unsplash.com/photo-1538485399081-7a66562c35fc?q=80&w=1974&auto=format&fit=crop",
+      "attractions": ["경복궁", "명동", "남산타워", "인사동", "한강공원"],
+      "tags": ["도시", "쇼핑", "역사", "문화"]
+    },
+    {
+      "id": 2,
+      "name": "부산",
+      "description": "아름다운 해변과 활기찬 분위기의 항구도시",
+      "shortDescription": "해변, 신선한 해산물, 그리고 독특한 문화를 경험하세요",
+      "image": "https://images.unsplash.com/photo-1601549299084-5d1a9d5a55a5?q=80&w=1931&auto=format&fit=crop",
+      "attractions": ["해운대", "광안리", "자갈치시장", "감천문화마을", "태종대"],
+      "tags": ["해변", "해산물", "야경", "항구"]
+    },
+    {
+      "id": 3,
+      "name": "제주도",
+      "description": "화산섬의 아름다운 자연과 독특한 문화",
+      "shortDescription": "한국의 대표적인 휴양지로 자연의 아름다움을 만끽하세요",
+      "image": "https://images.unsplash.com/photo-1589219963491-34c71cde4eb2?q=80&w=1931&auto=format&fit=crop",
+      "attractions": ["성산일출봉", "한라산", "만장굴", "우도", "올레길"],
+      "tags": ["자연", "휴양", "바다", "오름"]
+    },
+    {
+      "id": 4,
+      "name": "경주",
+      "description": "천년 고도의 역사와 문화가 살아 숨쉬는 도시",
+      "shortDescription": "신라의 역사와 불교 유적을 탐험하세요",
+      "image": "https://images.unsplash.com/photo-1540469515203-85a5289f9fab?q=80&w=1974&auto=format&fit=crop",
+      "attractions": ["불국사", "석굴암", "첨성대", "안압지", "대릉원"],
+      "tags": ["역사", "문화재", "불교", "유적"]
+    },
+    {
+      "id": 5,
+      "name": "전주",
+      "description": "한옥과 전통문화, 맛있는 음식이 있는 도시",
+      "shortDescription": "한옥마을과 전통 음식의 도시",
+      "image": "https://images.unsplash.com/photo-1585008389952-86ce46a7bfbad?q=80&w=1974&auto=format&fit=crop",
+      "attractions": ["한옥마을", "경기전", "전동성당", "오목대", "남부시장"],
+      "tags": ["한옥", "전통", "음식", "문화"]
+    },
+    {
+      "id": 6,
+      "name": "강릉",
+      "description": "동해의 아름다운 바다와 커피 문화가 발달한 도시",
+      "shortDescription": "바다와 커피를 즐길 수 있는 동해안의 보석",
+      "image": "https://images.unsplash.com/photo-1507014789999-cd3b1a9bf1cc?q=80&w=1974&auto=format&fit=crop",
+      "attractions": ["정동진", "경포대", "주문진", "안목 커피거리", "오죽헌"],
+      "tags": ["바다", "커피", "해변", "일출"]
+    }
+  ]

@@ -1,0 +1,192 @@
+[
+    {
+      "destination": "서울",
+      "hotels": [
+        {
+          "id": 1,
+          "name": "신라 호텔",
+          "description": "럭셔리 5성급 호텔로 한국 전통의 우아함과 현대적 편안함을 결합",
+          "location": "중구 장충동",
+          "pricePerNight": 350000,
+          "rating": 4.8,
+          "amenities": ["수영장", "스파", "피트니스 센터", "레스토랑", "주차장"],
+          "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 2,
+          "name": "롯데호텔 서울",
+          "description": "번화가에 위치한 고급스러운 5성급 호텔로 훌륭한 도시 전망 제공",
+          "location": "중구 을지로",
+          "pricePerNight": 280000,
+          "rating": 4.6,
+          "amenities": ["수영장", "사우나", "피트니스 센터", "레스토랑", "비즈니스 센터"],
+          "image": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 3,
+          "name": "호텔 the 별",
+          "description": "인사동 근처에 위치한 부티크 호텔로 한국 전통 분위기와 현대적 감각의 조화",
+          "location": "종로구 인사동",
+          "pricePerNight": 150000,
+          "rating": 4.5,
+          "amenities": ["카페", "정원", "공용 라운지", "무료 와이파이", "투어 안내"],
+          "image": "https://images.unsplash.com/photo-1587213811864-22b4041c7cdc?q=80&w=1974&auto=format&fit=crop"
+        },
+        {
+          "id": 4,
+          "name": "9 브릭 호텔",
+          "description": "홍대 지역의 스타일리시한 부티크 호텔로 젊은 감각의 인테리어",
+          "location": "마포구 홍대입구",
+          "pricePerNight": 120000,
+          "rating": 4.3,
+          "amenities": ["루프탑 바", "카페", "라운지", "무료 와이파이", "자전거 대여"],
+          "image": "https://images.unsplash.com/photo-1631049035182-249067d7618e?q=80&w=2070&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "부산",
+      "hotels": [
+        {
+          "id": 5,
+          "name": "파라다이스 호텔 부산",
+          "description": "해운대 해변 앞에 위치한 럭셔리 리조트로 해변 전망과 카지노 시설",
+          "location": "해운대구 중동",
+          "pricePerNight": 280000,
+          "rating": 4.7,
+          "amenities": ["수영장", "스파", "카지노", "해변 접근", "레스토랑"],
+          "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 6,
+          "name": "해운대 그랜드 호텔",
+          "description": "해운대 해변가에 위치한 4성급 호텔로 편안한 객실과 바다 전망",
+          "location": "해운대구 우동",
+          "pricePerNight": 220000,
+          "rating": 4.5,
+          "amenities": ["수영장", "레스토랑", "피트니스 센터", "사우나", "회의실"],
+          "image": "https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 7,
+          "name": "광안리 비치 호텔",
+          "description": "광안리 해변 근처에 위치한, 광안대교가 보이는 현대적인 호텔",
+          "location": "수영구 광안리",
+          "pricePerNight": 180000,
+          "rating": 4.4,
+          "amenities": ["해변 접근", "루프탑 바", "카페", "주차장", "대여 자전거"],
+          "image": "https://images.unsplash.com/photo-1615460549969-36fa19521a4f?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "제주도",
+      "hotels": [
+        {
+          "id": 8,
+          "name": "신라 스테이 제주",
+          "description": "제주 시내에 위치한 현대적이고 깔끔한 4성급 호텔",
+          "location": "제주시 노형동",
+          "pricePerNight": 200000,
+          "rating": 4.6,
+          "amenities": ["수영장", "레스토랑", "피트니스 센터", "키즈룸", "주차장"],
+          "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 9,
+          "name": "제주 히든 클리프",
+          "description": "중문 관광단지 근처의 해안가에 위치한 럭셔리 리조트",
+          "location": "서귀포시 예래동",
+          "pricePerNight": 350000,
+          "rating": 4.8,
+          "amenities": ["인피니티 풀", "프라이빗 비치", "스파", "레스토랑", "바"],
+          "image": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2049&auto=format&fit=crop"
+        },
+        {
+          "id": 10,
+          "name": "제주 한옥 스테이",
+          "description": "제주 전통 한옥을 현대적으로 재해석한 독특한 숙박 경험 제공",
+          "location": "서귀포시 성산읍",
+          "pricePerNight": 150000,
+          "rating": 4.7,
+          "amenities": ["온돌방", "정원", "전통 조식", "문화 체험", "무료 와이파이"],
+          "image": "https://images.unsplash.com/photo-1490122417551-6ee9691429d0?q=80&w=2070&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "경주",
+      "hotels": [
+        {
+          "id": 11,
+          "name": "힐튼 경주",
+          "description": "보문호수 근처에 위치한 고급스러운 5성급 리조트",
+          "location": "보문관광단지",
+          "pricePerNight": 250000,
+          "rating": 4.6,
+          "amenities": ["골프 코스", "수영장", "스파", "테니스 코트", "레스토랑"],
+          "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 12,
+          "name": "경주 한옥 게스트하우스",
+          "description": "경주 시내에 위치한 전통 한옥 스타일의 편안한 게스트하우스",
+          "location": "경주시 황남동",
+          "pricePerNight": 80000,
+          "rating": 4.5,
+          "amenities": ["전통 온돌방", "공용 주방", "정원", "무료 조식", "자전거 대여"],
+          "image": "https://images.unsplash.com/photo-1667148937478-02e9ebcbf5d7?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "전주",
+      "hotels": [
+        {
+          "id": 13,
+          "name": "전주 한옥 마을 숙박",
+          "description": "한옥마을 내부에 위치한 전통 한옥 게스트하우스, 진정한 한국 문화 경험",
+          "location": "완산구 풍남동",
+          "pricePerNight": 100000,
+          "rating": 4.7,
+          "amenities": ["온돌방", "한복 체험", "전통 조식", "문화 프로그램", "다도 체험"],
+          "image": "https://images.unsplash.com/photo-1610456048506-0cfddc28f577?q=80&w=1974&auto=format&fit=crop"
+        },
+        {
+          "id": 14,
+          "name": "라한 호텔 전주",
+          "description": "전주 시내 중심부에 위치한 현대적인 비즈니스 호텔",
+          "location": "완산구 서노송동",
+          "pricePerNight": 150000,
+          "rating": 4.4,
+          "amenities": ["레스토랑", "피트니스 센터", "비즈니스 시설", "주차장", "와이파이"],
+          "image": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    },
+    {
+      "destination": "강릉",
+      "hotels": [
+        {
+          "id": 15,
+          "name": "스카이베이 호텔 경포",
+          "description": "경포해변 근처에 위치한 모던한 럭셔리 호텔, 바다 전망 제공",
+          "location": "강릉시 경포동",
+          "pricePerNight": 220000,
+          "rating": 4.6,
+          "amenities": ["해변 접근", "인피니티 풀", "스파", "레스토랑", "바"],
+          "image": "https://images.unsplash.com/photo-1562790351-d273a961e0e9?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+          "id": 16,
+          "name": "정동진 선라이즈 펜션",
+          "description": "정동진 해변 근처에 위치한 아늑한 펜션, 일출 명소",
+          "location": "강릉시 정동진",
+          "pricePerNight": 120000,
+          "rating": 4.5,
+          "amenities": ["오션뷰", "바베큐 시설", "테라스", "주방", "무료 주차"],
+          "image": "https://images.unsplash.com/photo-1600011689032-8b628b8a8747?q=80&w=1974&auto=format&fit=crop"
+        }
+      ]
+    }
+  ]
