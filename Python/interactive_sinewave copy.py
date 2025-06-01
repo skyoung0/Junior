@@ -52,6 +52,7 @@ class SignalParameters:
         self.sample_rate = 20  # Hz
         self.quantize_bits = 4  # 비트
         self.recon_method = '계단형'  # '계단형', '선형', 'Sinc 보간'
+        self.auto_range = True  # 자동 범위 조정
         
         # 변조 파라미터
         self.carrier_freq = 10  # Hz
@@ -64,7 +65,7 @@ class SignalParameters:
         self.filter_q = 1.0  # 품질 계수
         self.filter_type = 'LPF'  # 'LPF', 'HPF', 'BPF', 'BSF', '미분기', '적분기'
 
-# 신호 처리 함수들
+# 개선된 신호 처리 함수들
 class SignalProcessing:
     @staticmethod
     def calculate_sine(t, freq, amp, phase, is_active):
@@ -99,25 +100,39 @@ class SignalProcessing:
         return sample_times, sampled_values
     
     @staticmethod
-    def quantize_signal(values, bits):
-        """신호 양자화"""
+    def quantize_signal(values, bits, auto_range=True, signal_range=None):
+        """개선된 신호 양자화"""
         # 양자화 레벨 계산
         levels = 2**bits
         
-        # 입력 신호 범위 찾기
-        signal_min = -2.0  # 고정 범위 사용 (-2 ~ 2)
-        signal_max = 2.0
+        if auto_range:
+            # 자동 범위: 실제 신호의 최대/최소값 사용
+            signal_min = np.min(values)
+            signal_max = np.max(values)
+            # 범위가 너무 작으면 기본값 사용
+            if signal_max - signal_min < 1e-6:
+                signal_min, signal_max = -2.0, 2.0
+        else:
+            # 고정 범위 또는 사용자 정의 범위
+            if signal_range is None:
+                signal_min, signal_max = -2.0, 2.0
+            else:
+                signal_min, signal_max = signal_range
         
         # 양자화
         normalized = (values - signal_min) / (signal_max - signal_min)  # 0~1 정규화
-        quantized_normalized = np.round(normalized * (levels - 1)) / (levels - 1)
-        quantized = quantized_normalized * (signal_max - signal_min) + signal_min
+        # 범위를 [0, levels-1]로 매핑 후 반올림
+        quantized_levels = np.round(normalized * (levels - 1))
+        # 범위 제한
+        quantized_levels = np.clip(quantized_levels, 0, levels - 1)
+        # 다시 원래 신호 범위로 변환
+        quantized = (quantized_levels / (levels - 1)) * (signal_max - signal_min) + signal_min
         
-        return quantized
+        return quantized, (signal_min, signal_max)
         
     @staticmethod
     def reconstruct_signal(sample_times, sample_values, t, method='zero-order'):
-        """샘플링된 신호 재구성"""
+        """개선된 신호 재구성"""
         if method == 'zero-order':
             # Zero-order hold (계단 형태)
             reconstructed = np.zeros_like(t)
@@ -135,67 +150,51 @@ class SignalProcessing:
             reconstructed = np.interp(t, sample_times, sample_values)
             
         elif method == 'sinc':
-            # Sinc 보간법 (이상적인 저역통과 필터)
+            # 개선된 Sinc 보간법 (벡터화)
             reconstructed = np.zeros_like(t)
-            T = 1.0 / (sample_times[1] - sample_times[0])  # 샘플링 주파수
+            dt = sample_times[1] - sample_times[0]  # 샘플링 간격
             
-            for i, t_i in enumerate(t):
-                sum_val = 0
-                for j, sample_time in enumerate(sample_times):
-                    if t_i == sample_time:
-                        sum_val = sample_values[j]
-                        break
-                    else:
-                        sum_val += sample_values[j] * np.sin(np.pi * T * (t_i - sample_time)) / (np.pi * T * (t_i - sample_time))
-                reconstructed[i] = sum_val
+            # 벡터화된 계산을 위한 메시 그리드
+            t_mesh, sample_mesh = np.meshgrid(t, sample_times, indexing='ij')
+            time_diff = t_mesh - sample_mesh
+            
+            # sinc 함수 계산 (0에서의 특이점 처리)
+            sinc_values = np.where(np.abs(time_diff) < 1e-10, 
+                                 1.0, 
+                                 np.sin(np.pi * time_diff / dt) / (np.pi * time_diff / dt))
+            
+            # 가중합으로 신호 재구성
+            reconstructed = np.sum(sinc_values * sample_values, axis=1)
                 
         return reconstructed
     
     @staticmethod
     def modulate_signal(t, signal, carrier_freq, carrier_amp, mod_index, mod_type):
-        """신호 변조"""
+        """개선된 신호 변조"""
         # 반송파 신호
         carrier = carrier_amp * np.sin(2 * np.pi * carrier_freq * t)
         
+        # 신호 정규화 (안전한 정규화)
+        if np.max(np.abs(signal)) > 1e-10:
+            normalized_signal = signal / np.max(np.abs(signal))
+        else:
+            normalized_signal = signal
+        
         if mod_type == 'AM':
             # 진폭 변조 (AM): s(t) = A_c [1 + μ*m(t)] * cos(2πf_c*t)
-            # 여기서 μ는 변조 지수, m(t)는 정규화된 메시지 신호
-            
-            # 신호 정규화 (최대 절대값이 1이 되도록)
-            if np.max(np.abs(signal)) > 0:
-                normalized_signal = signal / np.max(np.abs(signal))
-            else:
-                normalized_signal = signal
-                
             modulated = carrier_amp * (1 + mod_index * normalized_signal) * np.sin(2 * np.pi * carrier_freq * t)
             
         elif mod_type == 'FM':
             # 주파수 변조 (FM): s(t) = A_c * cos(2πf_c*t + 2πk_f ∫m(τ)dτ)
-            # 여기서 k_f는 주파수 편이 상수
-            
-            # 신호 정규화
-            if np.max(np.abs(signal)) > 0:
-                normalized_signal = signal / np.max(np.abs(signal))
-            else:
-                normalized_signal = signal
-                
-            # 적분 계산 (누적 합)
-            integrated_signal = np.cumsum(normalized_signal) * (t[1] - t[0])
+            # 개선된 적분 계산 (누적 사다리꼴 적분)
+            dt = t[1] - t[0]
+            integrated_signal = np.cumsum(normalized_signal) * dt
             
             # FM 변조
             modulated = carrier_amp * np.sin(2 * np.pi * carrier_freq * t + mod_index * integrated_signal)
             
         elif mod_type == 'PM':
             # 위상 변조 (PM): s(t) = A_c * cos(2πf_c*t + k_p*m(t))
-            # 여기서 k_p는 위상 편이 상수
-            
-            # 신호 정규화
-            if np.max(np.abs(signal)) > 0:
-                normalized_signal = signal / np.max(np.abs(signal))
-            else:
-                normalized_signal = signal
-                
-            # PM 변조
             modulated = carrier_amp * np.sin(2 * np.pi * carrier_freq * t + mod_index * normalized_signal)
             
         else:
@@ -205,7 +204,7 @@ class SignalProcessing:
     
     @staticmethod
     def apply_analog_filter(t, signal, cutoff_freq, q_factor, filter_type):
-        """아날로그 필터 적용"""
+        """개선된 아날로그 필터 적용"""
         # FFT를 이용한 주파수 영역 필터링
         dt = t[1] - t[0]  # 시간 간격
         n = len(signal)   # 신호 길이
@@ -216,43 +215,37 @@ class SignalProcessing:
         # 주파수 배열 생성
         frequencies = np.fft.fftfreq(n, dt)
         
-        # 필터 전달 함수 계산
-        if filter_type == 'LPF':  # 저역 통과 필터
-            # H(s) = 1 / (s/ωc + 1)^2
-            transfer_func = 1.0 / (1.0 + 1j * np.abs(frequencies) / cutoff_freq)**2
+        # 복소 주파수 s = jω 계산
+        s = 1j * 2 * np.pi * frequencies
+        omega_c = 2 * np.pi * cutoff_freq
+        
+        # 개선된 필터 전달 함수 계산
+        if filter_type == 'LPF':  # 저역 통과 필터 (2차 버터워스)
+            transfer_func = (omega_c**2) / (s**2 + np.sqrt(2)*omega_c*s + omega_c**2)
             
-        elif filter_type == 'HPF':  # 고역 통과 필터
-            # H(s) = (s/ωc)^2 / ((s/ωc)^2 + (s/ωc)/Q + 1)
-            s_term = 1j * np.abs(frequencies) / cutoff_freq
-            transfer_func = s_term**2 / (s_term**2 + s_term/q_factor + 1)
+        elif filter_type == 'HPF':  # 고역 통과 필터 (2차 버터워스)
+            transfer_func = s**2 / (s**2 + np.sqrt(2)*omega_c*s + omega_c**2)
             
         elif filter_type == 'BPF':  # 대역 통과 필터
-            # H(s) = (s/ωc)/Q / ((s/ωc)^2 + (s/ωc)/Q + 1)
-            s_term = 1j * np.abs(frequencies) / cutoff_freq
-            transfer_func = (s_term/q_factor) / (s_term**2 + s_term/q_factor + 1)
+            transfer_func = (omega_c*s/q_factor) / (s**2 + (omega_c/q_factor)*s + omega_c**2)
             
         elif filter_type == 'BSF':  # 대역 저지 필터
-            # H(s) = ((s/ωc)^2 + 1) / ((s/ωc)^2 + (s/ωc)/Q + 1)
-            s_term = 1j * np.abs(frequencies) / cutoff_freq
-            transfer_func = (s_term**2 + 1) / (s_term**2 + s_term/q_factor + 1)
+            transfer_func = (s**2 + omega_c**2) / (s**2 + (omega_c/q_factor)*s + omega_c**2)
             
         elif filter_type == '미분기':  # 미분기
-            # H(s) = s
-            transfer_func = 1j * 2 * np.pi * frequencies
+            transfer_func = s
             
         elif filter_type == '적분기':  # 적분기
-            # H(s) = 1/s
-            # 0 주파수에서의 분모가 0이 되는 것을 방지
-            transfer_func = np.zeros_like(frequencies, dtype=complex)
-            nonzero_freq = frequencies != 0
-            transfer_func[nonzero_freq] = 1.0 / (1j * 2 * np.pi * frequencies[nonzero_freq])
-            # DC 성분 처리 (무한대가 되는 것을 방지)
-            if any(~nonzero_freq):
-                transfer_func[~nonzero_freq] = n  # 적당히 큰 값으로 설정
-        
+            # 0 주파수에서의 특이점 처리
+            transfer_func = np.where(np.abs(s) < 1e-10, 
+                                   1e6,  # 매우 큰 값
+                                   1.0 / s)
         else:
             # 필터 적용 안함
             return signal
+        
+        # NaN 및 무한대 값 처리
+        transfer_func = np.nan_to_num(transfer_func, nan=0.0, posinf=1e6, neginf=-1e6)
         
         # 필터 적용
         filtered_fft = fft_signal * transfer_func
@@ -264,42 +257,76 @@ class SignalProcessing:
     
     @staticmethod
     def calculate_frequency_response(frequencies, cutoff_freq, q_factor, filter_type):
-        """주파수 응답 계산"""
-        # 주파수 응답 계산 (크기)
-        magnitude = np.zeros_like(frequencies)
+        """개선된 주파수 응답 계산"""
+        # 복소 주파수 s = jω
+        s = 1j * 2 * np.pi * frequencies
+        omega_c = 2 * np.pi * cutoff_freq
         
-        for i, f in enumerate(frequencies):
-            if filter_type == 'LPF':  # 저역 통과 필터
-                s_term = 1j * f / cutoff_freq
-                h = 1.0 / (1.0 + s_term)**2
-                
-            elif filter_type == 'HPF':  # 고역 통과 필터
-                s_term = 1j * f / cutoff_freq
-                h = s_term**2 / (s_term**2 + s_term/q_factor + 1)
-                
-            elif filter_type == 'BPF':  # 대역 통과 필터
-                s_term = 1j * f / cutoff_freq
-                h = (s_term/q_factor) / (s_term**2 + s_term/q_factor + 1)
-                
-            elif filter_type == 'BSF':  # 대역 저지 필터
-                s_term = 1j * f / cutoff_freq
-                h = (s_term**2 + 1) / (s_term**2 + s_term/q_factor + 1)
-                
-            elif filter_type == '미분기':  # 미분기
-                h = 1j * 2 * np.pi * f
-                
-            elif filter_type == '적분기':  # 적분기
-                if f == 0:
-                    h = 1e6  # 매우 큰 값으로 처리
-                else:
-                    h = 1.0 / (1j * 2 * np.pi * f)
+        if filter_type == 'LPF':  # 2차 버터워스 LPF
+            h = (omega_c**2) / (s**2 + np.sqrt(2)*omega_c*s + omega_c**2)
             
-            else:
-                h = 1.0  # 필터 적용 안함
+        elif filter_type == 'HPF':  # 2차 버터워스 HPF
+            h = s**2 / (s**2 + np.sqrt(2)*omega_c*s + omega_c**2)
             
-            magnitude[i] = abs(h)
+        elif filter_type == 'BPF':  # 대역 통과 필터
+            h = (omega_c*s/q_factor) / (s**2 + (omega_c/q_factor)*s + omega_c**2)
             
-        return magnitude
+        elif filter_type == 'BSF':  # 대역 저지 필터
+            h = (s**2 + omega_c**2) / (s**2 + (omega_c/q_factor)*s + omega_c**2)
+            
+        elif filter_type == '미분기':  # 미분기
+            h = s
+            
+        elif filter_type == '적분기':  # 적분기
+            h = np.where(np.abs(s) < 1e-10, 
+                        1e6,  # DC에서 매우 큰 값
+                        1.0 / s)
+        else:
+            h = np.ones_like(s)  # 필터 적용 안함
+        
+        # NaN 및 무한대 값 처리
+        h = np.nan_to_num(h, nan=0.0, posinf=1e6, neginf=-1e6)
+        
+        return np.abs(h)
+    
+    @staticmethod
+    def calculate_snr(original, processed):
+        """신호 대 잡음비 계산"""
+        noise = original - processed
+        signal_power = np.mean(original**2)
+        noise_power = np.mean(noise**2)
+        
+        if noise_power < 1e-10:
+            return float('inf')
+        
+        snr_linear = signal_power / noise_power
+        snr_db = 10 * np.log10(snr_linear)
+        return snr_db
+    
+    @staticmethod
+    def calculate_thd(signal, fundamental_freq, sample_rate):
+        """전고조파 왜곡률 계산"""
+        # FFT 계산
+        fft_signal = np.abs(np.fft.fft(signal))
+        freqs = np.fft.fftfreq(len(signal), 1/sample_rate)
+        
+        # 기본 주파수 성분 찾기
+        fundamental_idx = np.argmin(np.abs(freqs - fundamental_freq))
+        fundamental_power = fft_signal[fundamental_idx]**2
+        
+        # 고조파 성분들 찾기 (2차~5차)
+        harmonic_power = 0
+        for h in range(2, 6):  # 2차~5차 고조파
+            harmonic_freq = h * fundamental_freq
+            if harmonic_freq < sample_rate / 2:  # 나이퀴스트 한계 내에서만
+                harmonic_idx = np.argmin(np.abs(freqs - harmonic_freq))
+                harmonic_power += fft_signal[harmonic_idx]**2
+        
+        if fundamental_power < 1e-10:
+            return 0
+        
+        thd = np.sqrt(harmonic_power / fundamental_power) * 100
+        return thd
 
 class SignalSimulator:
     def __init__(self):
@@ -322,7 +349,7 @@ class SignalSimulator:
         """레이아웃 설정 - 그래프 및 UI 영역 배치"""
         # 메인 그림 생성
         self.fig = plt.figure(figsize=(18, 9))
-        self.fig.canvas.manager.set_window_title('신호 처리 시뮬레이션')
+        self.fig.canvas.manager.set_window_title('개선된 신호 처리 시뮬레이션')
         
         # 3개의 열로 분할 (좌측 컨트롤, 중앙 그래프, 우측 컨트롤)
         self.gs = gridspec.GridSpec(1, 3, width_ratios=[0.7, 4, 1.3])
@@ -721,10 +748,11 @@ class SignalSimulator:
                 self.params.sample_rate
             )
             
-            # 양자화
-            quantized_values = SignalProcessing.quantize_signal(
+            # 개선된 양자화
+            quantized_values, signal_range = SignalProcessing.quantize_signal(
                 sampled_values,
-                self.params.quantize_bits
+                self.params.quantize_bits,
+                auto_range=self.params.auto_range
             )
             
             # 재구성 방법 선택
@@ -769,7 +797,7 @@ class SignalSimulator:
             
             # 양자화 레벨 표시
             levels = 2**self.params.quantize_bits
-            level_values = np.linspace(-2, 2, levels)
+            level_values = np.linspace(signal_range[0], signal_range[1], levels)
             for level in level_values:
                 self.ax2.axhline(y=level, color='g', linestyle='-', alpha=0.2)
             
@@ -786,6 +814,18 @@ class SignalSimulator:
                     verticalalignment='top'
                 )
             
+            # SNR 계산 및 표시
+            snr = SignalProcessing.calculate_snr(composite_wave, reconstructed)
+            if snr != float('inf'):
+                self.ax2.text(
+                    0.02,
+                    0.88,
+                    f'SNR: {snr:.1f} dB',
+                    transform=self.ax2.transAxes,
+                    color='blue',
+                    verticalalignment='top'
+                )
+            
             self.ax2.set_xlabel('시간 (초)')
             self.ax2.set_ylabel('진폭')
             self.ax2.legend(loc='upper right')
@@ -799,24 +839,24 @@ class SignalSimulator:
                 self.params.sample_rate
             )
             
-            # 양자화
-            quantized_values = SignalProcessing.quantize_signal(
+            # 개선된 양자화
+            quantized_values, signal_range = SignalProcessing.quantize_signal(
                 sampled_values,
-                self.params.quantize_bits
+                self.params.quantize_bits,
+                auto_range=self.params.auto_range
             )
             
             # 양자화 오차 계산
             quantization_error = sampled_values - quantized_values
             
-            # 디지털 표현
+            # 개선된 디지털 표현
             binary_values = []
+            levels = 2**self.params.quantize_bits
             for value in quantized_values:
-                # -2~2 범위를 양자화 레벨로 변환
-                levels = 2**self.params.quantize_bits
-                normalized = (value + 2) / 4.0  # -2~2 -> 0~1
+                # 양자화 레벨 인덱스 계산
+                normalized = (value - signal_range[0]) / (signal_range[1] - signal_range[0])
                 level_idx = int(np.round(normalized * (levels - 1)))
-                if level_idx < 0: level_idx = 0
-                if level_idx >= levels: level_idx = levels - 1
+                level_idx = np.clip(level_idx, 0, levels - 1)
                 
                 # 이진 표현
                 binary = format(level_idx, f'0{self.params.quantize_bits}b')
@@ -834,8 +874,7 @@ class SignalSimulator:
             )
             
             # 양자화 레벨 표시
-            levels = 2**self.params.quantize_bits
-            level_values = np.linspace(-2, 2, levels)
+            level_values = np.linspace(signal_range[0], signal_range[1], levels)
             for level in level_values:
                 self.ax2.axhline(y=level, color='g', linestyle='-', alpha=0.2)
             
@@ -865,6 +904,17 @@ class SignalSimulator:
                     color='red',
                     verticalalignment='top'
                 )
+            
+            # 양자화 노이즈 전력 계산
+            quantization_noise_power = np.mean(quantization_error**2)
+            self.ax2.text(
+                0.02,
+                0.88,
+                f'양자화 노이즈: {quantization_noise_power:.4f}',
+                transform=self.ax2.transAxes,
+                color='magenta',
+                verticalalignment='top'
+            )
             
             # 원본 신호 (참조용)
             self.ax2.plot(
@@ -934,6 +984,18 @@ class SignalSimulator:
                     transform=self.ax2.transAxes,
                     verticalalignment='top'
                 )
+                
+                # 변조 효율성 계산
+                if self.params.mod_index <= 1:
+                    efficiency = (self.params.mod_index**2) / (2 + self.params.mod_index**2) * 100
+                    self.ax2.text(
+                        0.02,
+                        0.88,
+                        f'변조 효율: {efficiency:.1f}%',
+                        transform=self.ax2.transAxes,
+                        verticalalignment='top'
+                    )
+                    
             elif self.params.mod_type == 'FM':
                 # FM 주파수 편이 = 변조 지수 * 최대 주파수
                 max_freq = max([f for f, a in zip(self.params.frequencies, self.params.active) if a]) if any(self.params.active) else 0
@@ -946,18 +1008,41 @@ class SignalSimulator:
                     verticalalignment='top'
                 )
                 # FM 대역폭 (카슨의 법칙) ≈ 2(Δf + fm)
+                carson_bandwidth = 2 * (freq_deviation + max_freq)
                 self.ax2.text(
                     0.02,
                     0.93,
-                    f'대역폭(카슨): {2 * (freq_deviation + max_freq):.1f}Hz',
+                    f'대역폭(카슨): {carson_bandwidth:.1f}Hz',
                     transform=self.ax2.transAxes,
                     verticalalignment='top'
                 )
+                
+                # 변조 지수 β
+                if max_freq > 0:
+                    beta = freq_deviation / max_freq
+                    self.ax2.text(
+                        0.02,
+                        0.88,
+                        f'변조 지수 β: {beta:.2f}',
+                        transform=self.ax2.transAxes,
+                        verticalalignment='top'
+                    )
+                    
             elif self.params.mod_type == 'PM':
                 self.ax2.text(
                     0.02,
                     0.98,
                     f'위상 편이: {self.params.mod_index:.2f}rad',
+                    transform=self.ax2.transAxes,
+                    verticalalignment='top'
+                )
+                
+                # 위상 편이를 도 단위로도 표시
+                phase_deviation_deg = self.params.mod_index * 180 / np.pi
+                self.ax2.text(
+                    0.02,
+                    0.93,
+                    f'위상 편이: {phase_deviation_deg:.1f}°',
                     transform=self.ax2.transAxes,
                     verticalalignment='top'
                 )
@@ -969,7 +1054,7 @@ class SignalSimulator:
         elif self.current_mode == 'A-A':
             # 아날로그-아날로그 시뮬레이션
             
-            # 필터 적용
+            # 개선된 필터 적용
             filtered_signal = SignalProcessing.apply_analog_filter(
                 self.params.t,
                 composite_wave,
@@ -1012,8 +1097,18 @@ class SignalSimulator:
                     transform=self.ax2.transAxes,
                     verticalalignment='top'
                 )
+                
+                # 대역폭 계산
+                bandwidth = self.params.filter_cutoff / self.params.filter_q
+                self.ax2.text(
+                    0.02,
+                    0.93,
+                    f'대역폭: {bandwidth:.2f}Hz',
+                    transform=self.ax2.transAxes,
+                    verticalalignment='top'
+                )
             
-            # 주파수 응답 및 스펙트럼 계산
+            # 개선된 주파수 응답 및 스펙트럼 계산
             dt = self.params.t[1] - self.params.t[0]  # 시간 간격
             n = len(composite_wave)   # 신호 길이
             
@@ -1027,8 +1122,8 @@ class SignalSimulator:
             # 양의 주파수만 표시 (절반만)
             positive_freq_idx = freq > 0
             
-            # 주파수 응답 계산
-            freq_range = np.linspace(0.1, 20, 100)  # 주파수 범위
+            # 개선된 주파수 응답 계산
+            freq_range = np.logspace(-1, 1.5, 100)  # 0.1Hz ~ 31.6Hz, 로그 스케일
             response = SignalProcessing.calculate_frequency_response(
                 freq_range,
                 self.params.filter_cutoff,
@@ -1038,23 +1133,44 @@ class SignalSimulator:
             
             # 주파수 응답 패널 그리기
             self.response_panel.clear()
-            self.response_panel.plot(freq_range, response)
+            self.response_panel.semilogx(freq_range, 20*np.log10(response + 1e-10))  # dB 스케일
             self.response_panel.set_xlabel('주파수 (Hz)')
-            self.response_panel.set_ylabel('크기')
-            self.response_panel.set_xscale('log')
-            self.response_panel.grid(True)
+            self.response_panel.set_ylabel('크기 (dB)')
+            self.response_panel.set_title('주파수 응답 (dB)')
+            self.response_panel.grid(True, which="both", ls="-", alpha=0.3)
             self.response_panel.set_visible(True)
+            
+            # 차단 주파수에서 -3dB 선 표시
+            if self.params.filter_type in ['LPF', 'HPF', 'BPF', 'BSF']:
+                self.response_panel.axvline(x=self.params.filter_cutoff, color='r', linestyle='--', alpha=0.7, label='-3dB 점')
+                self.response_panel.axhline(y=-3, color='r', linestyle='--', alpha=0.7)
+                self.response_panel.legend(fontsize='small')
             
             # 주파수 스펙트럼 패널 그리기
             self.spectrum_panel.clear()
-            self.spectrum_panel.plot(freq[positive_freq_idx], original_fft[positive_freq_idx], 'k--', alpha=0.5, label='원본')
-            self.spectrum_panel.plot(freq[positive_freq_idx], filtered_fft[positive_freq_idx], 'b-', label='필터링')
+            max_freq_display = min(10, self.params.sample_rate/2) if hasattr(self.params, 'sample_rate') else 10
+            freq_mask = (freq > 0) & (freq <= max_freq_display)
+            
+            self.spectrum_panel.plot(freq[freq_mask], original_fft[freq_mask], 'k--', alpha=0.5, label='원본')
+            self.spectrum_panel.plot(freq[freq_mask], filtered_fft[freq_mask], 'b-', label='필터링')
             self.spectrum_panel.set_xlabel('주파수 (Hz)')
             self.spectrum_panel.set_ylabel('크기')
-            self.spectrum_panel.set_xlim(0, 10)  # 주요 주파수 영역 표시
+            self.spectrum_panel.set_title('주파수 스펙트럼')
+            self.spectrum_panel.set_xlim(0, max_freq_display)
             self.spectrum_panel.legend(fontsize='small')
             self.spectrum_panel.grid(True)
             self.spectrum_panel.set_visible(True)
+            
+            # SNR 계산
+            snr = SignalProcessing.calculate_snr(composite_wave, filtered_signal)
+            if snr != float('inf'):
+                self.ax2.text(
+                    0.02,
+                    0.88,
+                    f'SNR: {snr:.1f} dB',
+                    transform=self.ax2.transAxes,
+                    verticalalignment='top'
+                )
             
             self.ax2.set_xlabel('시간 (초)')
             self.ax2.set_ylabel('진폭')
