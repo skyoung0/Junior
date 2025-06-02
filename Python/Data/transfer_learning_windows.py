@@ -15,17 +15,19 @@ from collections import defaultdict
 import torch.nn.functional as F
 warnings.filterwarnings('ignore')
 
-# MPS 설정
-if torch.backends.mps.is_available():
-    device = torch.device('mps')
-    print("Using Apple Silicon GPU (MPS)")
-    torch.backends.mps.allow_tf32 = True
-elif torch.cuda.is_available():
+# Windows CUDA 설정
+if torch.cuda.is_available():
     device = torch.device('cuda')
-    print("Using CUDA GPU")
+    print(f"Using CUDA GPU: {torch.cuda.get_device_name(0)}")
+    print(f"CUDA Version: {torch.version.cuda}")
+    print(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+    # CUDA 최적화 설정
+    torch.backends.cudnn.benchmark = True
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
 else:
     device = torch.device('cpu')
-    print("Using CPU")
+    print("CUDA not available - Using CPU")
 
 print(f"Device: {device}")
 
@@ -58,7 +60,7 @@ data_transforms = {
     ])
 }
 
-def load_data(data_dir, batch_size=16, augmentation='basic'):
+def load_data(data_dir, batch_size=32, augmentation='basic'):  # Windows GPU는 더 큰 배치 처리 가능
     """데이터 로드 함수 - 증강 기법 선택 가능"""
     transform_key = f'train_{augmentation}' if augmentation in ['basic', 'advanced'] else 'train_basic'
     
@@ -68,7 +70,7 @@ def load_data(data_dir, batch_size=16, augmentation='basic'):
     }
     
     dataloaders = {x: DataLoader(image_datasets[x], batch_size=batch_size, 
-                                shuffle=True, num_workers=2, drop_last=True)
+                                shuffle=True, num_workers=4, drop_last=True, pin_memory=True)  # pin_memory로 GPU 전송 가속
                    for x in ['train', 'val']}
     
     dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
@@ -345,8 +347,8 @@ def evaluate_model_advanced(model, dataloader, class_names, save_path=None):
     
     with torch.no_grad():
         for inputs, labels in dataloader:
-            inputs = inputs.to(device)
-            labels = labels.to(device)
+            inputs = inputs.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
             
             outputs = model(inputs)
             probs = F.softmax(outputs, dim=1)
@@ -377,6 +379,11 @@ def evaluate_model_advanced(model, dataloader, class_names, save_path=None):
     return all_preds, all_labels, all_probs
 
 def main():
+    # Windows 환경에서 GPU 메모리 정보 출력
+    if torch.cuda.is_available():
+        print(f"Total GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+        print(f"Current GPU Memory: {torch.cuda.memory_allocated() / 1024**3:.2f} GB")
+    
     # 스크립트 위치 기준 경로 설정
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
@@ -439,7 +446,7 @@ def main():
             # 데이터 로드
             dataloaders, dataset_sizes, class_names = load_data(
                 data_dir, 
-                batch_size=12 if 'vit' in str(models_to_test) else 16,
+                batch_size=24 if 'vit' in str(models_to_test) else 32,  # Windows GPU에 맞게 배치 크기 증가
                 augmentation=reg_config['augmentation']
             )
             
@@ -511,7 +518,9 @@ def main():
                     
                     # 메모리 정리
                     del model, trained_model
-                    torch.mps.empty_cache() if device.type == 'mps' else None
+                    if device.type == 'cuda':
+                        torch.cuda.empty_cache()  # CUDA 메모리 정리
+                        print(f"GPU Memory after cleanup: {torch.cuda.memory_allocated()/1024**3:.2f}GB")
                     
                 except Exception as e:
                     print(f"Error with {model_name}: {str(e)}")
