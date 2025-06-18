@@ -108,7 +108,9 @@ def frequency_modulation(t, message, carrier_freq, freq_deviation):
     dt = t[1] - t[0]
     integrated_message = np.zeros_like(t)
     for i in range(1, len(t)):
-        integrated_message[i] = integrated_message[i-1] + (normalized_message[i] + normalized_message[i-1]) * dt / 2
+        integrated_message[i] = integrated_message[i-1] 
+        + (normalized_message[i]
+        + normalized_message[i-1]) * dt / 2
     
     # FM 공식: s(t) = Ac*cos(2πfct + 2πkf∫m(τ)dτ)
     return np.cos(2 * np.pi * carrier_freq * t + 2 * np.pi * freq_deviation * integrated_message)
