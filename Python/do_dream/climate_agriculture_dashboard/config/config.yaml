@@ -1,0 +1,563 @@
+# 농업 기후 분석 대시보드 설정 파일
+# ==========================================
+
+# 프로젝트 메타데이터
+project:
+  name: "농업 기후 분석 대시보드"
+  version: "1.0.0"
+  author: "Climate Agriculture Team"
+  description: "기후변화가 농작물 수확량에 미치는 영향 분석"
+  contact: "admin@agri-climate.kr"
+
+# 데이터 경로 설정
+data:
+  # 원본 데이터
+  raw:
+    path: "data/raw/"
+    weather_file: "weather_data.csv"
+    crop_file: "crop_yield.csv"
+    pest_file: "pest_disease.csv"
+  
+  # 전처리된 데이터
+  processed:
+    path: "data/processed/"
+    merged_file: "merged_data.csv"
+    cleaned_weather: "cleaned_weather.csv"
+    cleaned_crop: "cleaned_yield.csv"
+    cleaned_pest: "cleaned_pest.csv"
+  
+  # 모델 저장 경로
+  models:
+    path: "models/"
+    prediction_model: "crop_prediction_model.pkl"
+    metrics_file: "model_metrics.json"
+
+# 분석 설정
+analysis:
+  # 분석 기간
+  years:
+    start: 2010
+    end: 2023
+    prediction_start: 2024
+    prediction_end: 2030
+  
+  # 예측 설정
+  prediction:
+    test_size: 0.2
+    random_state: 42
+    cv_folds: 5
+  
+  # 통계 설정
+  statistics:
+    significance_level: 0.05
+    confidence_interval: 0.95
+  
+  # 위험도 임계값
+  risk_thresholds:
+    yield:
+      low: 80      # 80 이상: 저위험
+      medium: 60   # 60-80: 중위험  
+      high: 40     # 40-60: 고위험
+                   # 40 미만: 매우 고위험
+    
+    temperature:
+      normal_max: 16.0    # 정상 최대 기온
+      warning: 18.0       # 경고 수준
+      danger: 20.0        # 위험 수준
+    
+    pest_damage:
+      mild: 10      # 경미: 10% 미만
+      moderate: 25  # 보통: 10-25%
+      severe: 40    # 심각: 25% 이상
+
+# 지역 및 작물 설정
+regions:
+  list:
+    - "서울특별시"
+    - "부산광역시"
+    - "대구광역시"
+    - "인천광역시"
+    - "광주광역시"
+    - "대전광역시"
+    - "울산광역시"
+    - "세종특별자치시"
+    - "경기도"
+    - "강원특별자치도"
+    - "충청북도"
+    - "충청남도"
+    - "전라북도"
+    - "전라남도"
+    - "경상북도"
+    - "경상남도"
+    - "제주특별자치도"
+  
+  # 지역명 표준화 매핑
+  name_mapping:
+    "서울특별시": "서울"
+    "부산광역시": "부산"
+    "대구광역시": "대구"
+    "인천광역시": "인천"
+    "광주광역시": "광주"
+    "대전광역시": "대전"
+    "울산광역시": "울산"
+    "세종특별자치시": "세종"
+    "경기도": "경기"
+    "강원특별자치도": "강원"
+    "충청북도": "충북"
+    "충청남도": "충남"
+    "전라북도": "전북"
+    "전라남도": "전남"
+    "경상북도": "경북"
+    "경상남도": "경남"
+    "제주특별자치도": "제주"
+
+crops:
+  # 주요 작물 목록
+  major:
+    - "쌀"
+    - "밀"
+    - "콩"
+    - "옥수수"
+    - "감자"
+    - "고구마"
+    - "배추"
+    - "무"
+    - "양파"
+    - "마늘"
+    - "토마토"
+    - "오이"
+    - "호박"
+    - "당근"
+    - "시금치"
+  
+  # 작물별 카테고리
+  categories:
+    grains: ["쌀", "밀", "콩", "옥수수"]
+    vegetables: ["배추", "무", "양파", "마늘", "토마토", "오이", "호박", "당근", "시금치"]
+    roots: ["감자", "고구마"]
+
+# 병해충 설정
+pests:
+  types:
+    insects:
+      - "진딧물"
+      - "응애류"
+      - "나방류"
+      - "깍지벌레"
+      - "선충류"
+      - "총채벌레"
+      - "가루이"
+      - "굼벵이"
+    
+    diseases:
+      - "균류"
+      - "바이러스"
+      - "세균성병"
+      - "역병"
+      - "흰가루병"
+      - "녹병"
+      - "잿빛곰팡이병"
+      - "탄저병"
+  
+  # 심각도 분류
+  severity_levels:
+    - "경미"
+    - "보통"
+    - "심각"
+
+# 시각화 설정
+visualization:
+  # 색상 팔레트
+  colors:
+    primary: "#22c55e"
+    primary_dark: "#16a34a"
+    primary_darker: "#15803d"
+    primary_light: "#86efac"
+    primary_lighter: "#bbf7d0"
+    
+    danger: "#dc2626"
+    danger_light: "#fee2e2"
+    
+    warning: "#ea580c"
+    warning_yellow: "#eab308"
+    
+    info: "#3b82f6"
+    info_light: "#dbeafe"
+    
+    success: "#059669"
+    neutral: "#6b7280"
+    
+    text_primary: "#1a1a1a"
+    text_secondary: "#666666"
+    text_muted: "#9ca3af"
+  
+  # 차트 설정
+  charts:
+    height:
+      small: 300
+      medium: 400
+      large: 500
+      xlarge: 600
+    
+    # Plotly 기본 설정
+    plotly:
+      font_family: "Inter"
+      background_color: "rgba(0,0,0,0)"
+      grid_color: "rgba(0,0,0,0.1)"
+      
+    # 색상 순서 (차트용)
+    color_sequence:
+      - "#22c55e"  # 초록
+      - "#3b82f6"  # 파랑
+      - "#eab308"  # 노랑
+      - "#dc2626"  # 빨강
+      - "#8b5cf6"  # 보라
+      - "#f59e0b"  # 주황
+      - "#10b981"  # 에메랄드
+      - "#6366f1"  # 인디고
+
+# UI 설정
+ui:
+  # 페이지 설정
+  page_config:
+    page_title: "농업 기후 분석 대시보드"
+    page_icon: "🌾"
+    layout: "wide"
+    initial_sidebar_state: "expanded"
+  
+  # 사이드바 필터 기본값
+  sidebar_defaults:
+    year_range: [2018, 2023]  # 최근 5년
+    selected_regions: ["전체"]
+    selected_crops: ["전체"]
+  
+  # 메트릭 표시 형식
+  metrics:
+    decimal_places:
+      temperature: 1
+      rainfall: 0
+      yield: 1
+      percentage: 1
+      correlation: 3
+    
+    units:
+      temperature: "°C"
+      rainfall: "mm"
+      yield: "포인트"
+      area: "ha"
+      percentage: "%"
+
+# 모델 설정
+models:
+  # 사용할 모델들
+  algorithms:
+    - name: "Linear Regression"
+      type: "linear"
+      params: {}
+    
+    - name: "Random Forest"
+      type: "ensemble"
+      params:
+        n_estimators: 100
+        random_state: 42
+        max_depth: 10
+    
+    - name: "XGBoost"
+      type: "ensemble"
+      params:
+        n_estimators: 100
+        random_state: 42
+        max_depth: 6
+# 모델 설정
+models:
+  # 사용할 모델들
+  algorithms:
+    - name: "Linear Regression"
+      type: "linear"
+      params: {}
+    
+    - name: "Random Forest"
+      type: "ensemble"
+      params:
+        n_estimators: 100
+        random_state: 42
+        max_depth: 10
+    
+    - name: "XGBoost"
+      type: "ensemble"
+      params:
+        n_estimators: 100
+        random_state: 42
+        max_depth: 6
+        learning_rate: 0.1
+  
+  # 특성 설정
+  features:
+    # 기본 기후 특성
+    climate:
+      - "temperature"      # 평균기온
+      - "rainfall"         # 강수량
+      - "sunshine"         # 일조시간
+      - "humidity"         # 습도 (선택사항)
+    
+    # 병해충 특성
+    pest:
+      - "has_pest"         # 병해충 발생 여부
+      - "pest_severity"    # 심각도 (선택사항)
+      - "damage_area"      # 피해 면적 (선택사항)
+    
+    # 지역/작물 특성 (원핫인코딩)
+    categorical:
+      - "region"
+      - "crop"
+  
+  # 성능 평가 메트릭
+  evaluation:
+    metrics:
+      - "rmse"           # Root Mean Square Error
+      - "r2"             # R-squared
+      - "mae"            # Mean Absolute Error
+      - "mape"           # Mean Absolute Percentage Error
+    
+    # 모델 선택 기준
+    selection_metric: "r2"
+    min_r2_score: 0.6
+
+# 시나리오 분석 설정
+scenarios:
+  # 미래 예측 시나리오
+  future:
+    # 현재 트렌드 유지
+    baseline:
+      name: "현재 트렌드 유지"
+      description: "기존 기후변화 패턴 지속"
+      parameters:
+        temperature_change_per_year: 0.12  # °C/년
+        rainfall_change_per_year: 0        # mm/년
+        pest_increase_per_year: 0.02       # 발생률/년
+    
+    # 기후변화 가속
+    accelerated:
+      name: "기후변화 가속"
+      description: "극단적 기후변화 시나리오"
+      parameters:
+        temperature_change_per_year: 0.20  # °C/년
+        rainfall_change_per_year: -20      # mm/년
+        pest_increase_per_year: 0.05       # 발생률/년
+    
+    # 적응 정책 적용
+    adaptation:
+      name: "적응 정책 적용"
+      description: "기후 적응 기술 도입"
+      parameters:
+        temperature_change_per_year: 0.08  # °C/년
+        rainfall_change_per_year: 10       # mm/년
+        pest_increase_per_year: 0.01       # 발생률/년
+
+# 알림 및 경고 설정
+alerts:
+  # 자동 경고 조건
+  conditions:
+    high_pest_rate:
+      threshold: 15.0      # 15% 이상
+      message: "높은 병해충 발생률 감지"
+    
+    low_yield:
+      threshold: 60.0      # 60 미만
+      message: "수확량 급감 위험"
+    
+    high_temperature:
+      threshold: 18.0      # 18°C 이상
+      message: "고온 주의보"
+    
+    severe_pest_damage:
+      threshold: 10        # 10건 이상
+      message: "심각한 병해충 피해 다발"
+  
+  # 알림 설정
+  notifications:
+    enable: true
+    email: false          # 이메일 알림 (추후 구현)
+    dashboard: true       # 대시보드 내 알림
+
+# API 설정 (추후 확장용)
+api:
+  # 외부 데이터 소스
+  external_sources:
+    weather_api:
+      enabled: false
+      url: "https://api.weather.gov"
+      api_key: ""
+    
+    agriculture_api:
+      enabled: false
+      url: "https://api.agriculture.go.kr"
+      api_key: ""
+  
+  # 내부 API 설정
+  internal:
+    rate_limit: 100      # 시간당 요청 수
+    cache_timeout: 3600  # 캐시 유효시간 (초)
+
+# 로깅 설정
+logging:
+  level: "INFO"          # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # 로그 파일
+  files:
+    app_log: "logs/app.log"
+    error_log: "logs/error.log"
+    access_log: "logs/access.log"
+  
+  # 로그 로테이션
+  rotation:
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+# 캐싱 설정
+cache:
+  # Streamlit 캐시 설정
+  ttl: 3600              # Time To Live (초)
+  max_entries: 100       # 최대 캐시 항목 수
+  
+  # 데이터 캐시
+  data_cache:
+    enable: true
+    raw_data_ttl: 7200   # 원본 데이터 (2시간)
+    processed_data_ttl: 3600  # 처리된 데이터 (1시간)
+    chart_data_ttl: 1800 # 차트 데이터 (30분)
+
+# 성능 설정
+performance:
+  # 데이터 처리
+  chunk_size: 10000      # 대용량 데이터 청크 크기
+  max_rows: 50000        # 최대 처리 행 수
+  
+  # 병렬 처리
+  n_jobs: -1             # CPU 코어 수 (-1: 모든 코어)
+  
+  # 메모리 사용량
+  memory_limit: "2GB"    # 최대 메모리 사용량
+
+# 보안 설정
+security:
+  # 데이터 보호
+  encrypt_sensitive_data: false
+  
+  # 접근 제어 (추후 구현)
+  authentication:
+    enabled: false
+    method: "oauth2"     # oauth2, ldap, local
+  
+  # CORS 설정
+  cors:
+    enabled: false
+    allowed_origins: ["*"]
+
+# 환경별 설정
+environments:
+  development:
+    debug: true
+    sample_data: true
+    log_level: "DEBUG"
+    cache_ttl: 60        # 짧은 캐시 (개발용)
+  
+  production:
+    debug: false
+    sample_data: false
+    log_level: "INFO"
+    cache_ttl: 3600      # 긴 캐시 (운영용)
+  
+  testing:
+    debug: true
+    sample_data: true
+    log_level: "WARNING"
+    cache_ttl: 0         # 캐시 비활성화
+
+# 국제화 설정 (다국어 지원)
+i18n:
+  default_language: "ko"
+  supported_languages:
+    - "ko"               # 한국어
+    - "en"               # 영어 (추후 지원)
+  
+  # 날짜/시간 형식
+  date_format: "%Y-%m-%d"
+  datetime_format: "%Y-%m-%d %H:%M:%S"
+  
+  # 숫자 형식
+  number_format:
+    decimal_separator: "."
+    thousand_separator: ","
+
+# 백업 및 복구 설정
+backup:
+  # 자동 백업
+  auto_backup:
+    enabled: false
+    interval: "daily"    # daily, weekly, monthly
+    retention_days: 30
+  
+  # 백업 경로
+  backup_path: "backups/"
+  
+  # 백업할 항목
+  include:
+    - "data/processed/"
+    - "models/"
+    - "config/"
+
+# 버전 관리
+versioning:
+  # 데이터 버전 관리
+  data_versioning:
+    enabled: false
+    tool: "dvc"          # Data Version Control
+  
+  # 모델 버전 관리  
+  model_versioning:
+    enabled: false
+    tool: "mlflow"       # MLflow
+
+# 문서화 설정
+documentation:
+  # API 문서
+  api_docs:
+    enabled: false
+    format: "swagger"    # swagger, redoc
+  
+  # 사용자 매뉴얼
+  user_manual:
+    format: "markdown"
+    auto_generate: false
+
+# 테스트 설정
+testing:
+  # 단위 테스트
+  unit_tests:
+    framework: "pytest"
+    coverage_threshold: 80
+  
+  # 통합 테스트
+  integration_tests:
+    enabled: true
+    test_data_path: "tests/data/"
+
+# 모니터링 설정
+monitoring:
+  # 시스템 모니터링
+  system:
+    enabled: false
+    metrics:
+      - "cpu_usage"
+      - "memory_usage"
+      - "disk_usage"
+  
+  # 애플리케이션 모니터링
+  application:
+    enabled: false
+    metrics:
+      - "response_time"
+      - "error_rate"
+      - "user_sessions"

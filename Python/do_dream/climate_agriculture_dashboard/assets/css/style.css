@@ -1,0 +1,649 @@
+/* 농업 기후 분석 대시보드 - 메인 스타일시트 */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap");
+
+/* ========================================
+   전역 설정
+======================================== */
+
+:root {
+  /* 색상 팔레트 */
+  --primary-green: #22c55e;
+  --primary-green-dark: #16a34a;
+  --primary-green-darker: #15803d;
+  --primary-green-light: #86efac;
+  --primary-green-lighter: #bbf7d0;
+  --primary-green-pale: #dcfce7;
+  --primary-green-alpha: rgba(34, 197, 94, 0.1);
+
+  --danger-red: #dc2626;
+  --danger-red-light: #fee2e2;
+  --warning-orange: #ea580c;
+  --warning-yellow: #eab308;
+  --info-blue: #3b82f6;
+  --info-blue-light: #dbeafe;
+
+  /* 중성 색상 */
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-muted: #9ca3af;
+
+  --bg-primary: #fafafa;
+  --bg-secondary: #f5f5f5;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-glass: rgba(255, 255, 255, 0.8);
+
+  --border-light: rgba(255, 255, 255, 0.2);
+  --border-green: rgba(34, 197, 94, 0.2);
+  --border-subtle: #f3f4f6;
+
+  /* 그림자 */
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 32px rgba(34, 197, 94, 0.1);
+  --shadow-green: 0 12px 40px rgba(34, 197, 94, 0.15);
+
+  /* 크기 */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
+  --border-radius-2xl: 24px;
+
+  /* 간격 */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* 폰트 */
+  --font-family: "Inter", "Noto Sans KR", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+}
+
+/* ========================================
+   Streamlit 기본 요소 리셋
+======================================== */
+
+.main {
+  padding: 0 !important;
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
+  font-family: var(--font-family);
+}
+
+.block-container {
+  padding-top: var(--spacing-md) !important;
+  padding-bottom: var(--spacing-lg) !important;
+  max-width: 1400px !important;
+}
+
+/* Streamlit 요소 숨기기 */
+#MainMenu {
+  visibility: hidden;
+}
+.stDeployButton {
+  display: none;
+}
+footer {
+  visibility: hidden;
+}
+.stApp > header {
+  display: none;
+}
+.css-1d391kg {
+  background: linear-gradient(
+    180deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
+}
+
+/* ========================================
+   헤더 스타일
+======================================== */
+
+.dashboard-header {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-green),
+    var(--primary-green-dark)
+  );
+  border-radius: var(--border-radius-2xl) var(--border-radius-2xl) 0 0;
+}
+
+.page-header {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-green),
+    var(--primary-green-dark)
+  );
+}
+
+/* ========================================
+   타이포그래피
+======================================== */
+
+.main-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-4xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.main-subtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.page-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+  letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.section-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+  letter-spacing: -0.5px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-green),
+    var(--primary-green-dark)
+  );
+  border-radius: 2px;
+}
+
+/* ========================================
+   카드 컴포넌트
+======================================== */
+
+.chart-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-light);
+  margin: var(--spacing-md) 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-green);
+  box-shadow: var(--shadow-green);
+}
+
+.stat-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-light);
+  margin: var(--spacing-sm) 0;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.section-card {
+  background: transparent;
+  border-radius: 0;
+  padding: var(--spacing-lg) 0;
+  margin: var(--spacing-lg) 0;
+  border: none;
+  box-shadow: none;
+}
+
+/* ========================================
+   KPI 및 메트릭
+======================================== */
+
+.metric-mini {
+  background: var(--primary-green-alpha);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  text-align: center;
+  border: 1px solid var(--border-green);
+  transition: all 0.3s ease;
+}
+
+.metric-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-mini h4 {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--primary-green-darker);
+  margin: 0;
+}
+
+.metric-mini p {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--primary-green-darker);
+  margin: var(--spacing-xs) 0 0 0;
+  font-weight: 500;
+}
+
+.kpi-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-lg) var(--spacing-md);
+  border: 1px solid var(--border-light);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-green),
+    var(--primary-green-dark)
+  );
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+}
+
+.kpi-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--border-green);
+  box-shadow: 0 20px 60px rgba(34, 197, 94, 0.15);
+}
+
+.kpi-title {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.kpi-value {
+  font-family: var(--font-family);
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.kpi-subtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ========================================
+   내비게이션 및 필터
+======================================== */
+
+.nav-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--primary-green);
+}
+
+.filter-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-light);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ========================================
+   버튼 및 인터랙티브 요소
+======================================== */
+
+.custom-button {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green),
+    var(--primary-green-dark)
+  );
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-green);
+  background: linear-gradient(
+    135deg,
+    var(--primary-green-dark),
+    var(--primary-green-darker)
+  );
+}
+
+/* ========================================
+   특수 컴포넌트
+======================================== */
+
+.prediction-result {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green-alpha),
+    rgba(16, 185, 129, 0.05)
+  );
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-green);
+  margin: var(--spacing-md) 0;
+  text-align: center;
+}
+
+.prediction-value {
+  font-family: var(--font-family);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--primary-green-darker);
+  margin: 0;
+}
+
+.prediction-label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--primary-green-darker);
+  margin: var(--spacing-xs) 0 0 0;
+  font-weight: 500;
+}
+
+/* 위험도 배지 */
+.risk-indicator {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 20px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin: var(--spacing-xs) 0;
+}
+
+.risk-low {
+  background: linear-gradient(
+    135deg,
+    var(--primary-green-pale),
+    var(--primary-green-lighter)
+  );
+  color: var(--primary-green-darker);
+  border: 1px solid var(--border-green);
+}
+
+.risk-medium {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  border: 1px solid rgba(146, 64, 14, 0.2);
+}
+
+.risk-high {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  color: var(--danger-red);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* ========================================
+   경고 및 알림
+======================================== */
+
+.alert-box {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
+}
+
+.alert-title {
+  font-family: var(--font-family);
+  font-weight: 600;
+  color: var(--danger-red);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.alert-text {
+  font-family: var(--font-family);
+  color: #991b1b;
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+/* ========================================
+   푸터
+======================================== */
+
+.footer {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-xl);
+  text-align: center;
+  margin-top: var(--spacing-xl) * 1.5;
+  border: 1px solid var(--border-light);
+}
+
+/* ========================================
+   반응형 디자인
+======================================== */
+
+@media (max-width: 768px) {
+  .main-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .kpi-card {
+    padding: var(--spacing-md);
+  }
+
+  .chart-card {
+    padding: var(--spacing-md);
+  }
+
+  .section-title {
+    font-size: var(--font-size-xl);
+    padding-left: 16px;
+  }
+
+  .section-title::before {
+    width: 3px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .dashboard-header,
+  .page-header {
+    padding: var(--spacing-md);
+  }
+
+  .chart-card {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
+  }
+}
+
+/* ========================================
+   다크모드 준비 (선택사항)
+======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #ffffff;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-card: rgba(31, 41, 55, 0.9);
+    --bg-glass: rgba(31, 41, 55, 0.8);
+    --border-light: rgba(75, 85, 99, 0.3);
+    --border-subtle: #374151;
+  }
+}
+
+/* ========================================
+   애니메이션
+======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ========================================
+   커스텀 스크롤바
+======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-green-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-green);
+}
